@@ -5,6 +5,8 @@ interface SignInResponse {
 }
 
 interface UserDTO {
+  username?: string;
+  nickname?: string;
   email: string;
   password: string;
 }
@@ -23,4 +25,8 @@ export function signin(userDTO: UserDTO) {
 export function signout() {
   localStorage.removeItem("ACCESS_TOKEN");
   window.location.href = "/login";
+}
+
+export function signup(userDTO: UserDTO) {
+  return call("/auth/signup", "POST", userDTO);
 }
