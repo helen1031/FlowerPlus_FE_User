@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Container from "../components/Container";
 import Header from "../components/Header";
 import Title from "../components/Title";
+import { PostDTO, createPost } from "../service/PostService";
 
 const Form = styled.form`
   display: flex;
@@ -55,8 +56,8 @@ function CreatePost() {
   const [feature, setFeature] = useState<string>("");
   const [postRange, setPostRange] = useState<string>("");
   const [content, setContent] = useState<string>("");
-  const [isForExchange, setIsForExchange] = useState<boolean>(false);
-  const [isForSale, setIsForSale] = useState<boolean>(false);
+  const [forExchange, setForExchange] = useState<boolean>(false);
+  const [forSale, setForSale] = useState<boolean>(false);
 
   const maxImages = 5;
 
@@ -73,7 +74,19 @@ function CreatePost() {
   };
 
   const onChangeFlowerType = (event: ChangeEvent<HTMLSelectElement>) => {
-    setFlowerType(event.target.value);
+    let newValue: string;
+    switch (event.target.value) {
+      case "장미":
+        newValue = "ROSES";
+        break;
+      case "다알리아":
+        newValue = "DAHLIAS";
+        break;
+      default:
+        newValue = "ROSES"; //default value
+        break;
+    }
+    setFlowerType(newValue);
   };
 
   const onChangeQuantity = (event: ChangeEvent<HTMLInputElement>) => {
@@ -89,38 +102,59 @@ function CreatePost() {
   };
 
   const onChangePostRange = (event: ChangeEvent<HTMLInputElement>) => {
-    setPostRange(event.target.value);
-    setIsForExchange(false);
-    setIsForSale(false);
+    let newValue: string;
+    switch (event.target.value) {
+      case "전체공개":
+        newValue = "PUBLIC";
+        break;
+      case "구독자공개":
+        newValue = "SUBSCRIBERS";
+        break;
+      case "나만보기":
+        newValue = "PRIVATE";
+        break;
+      default:
+        newValue = "PUBLIC"; //default value
+        break;
+    }
+    setPostRange(newValue);
+    setForExchange(false);
+    setForSale(false);
   };
 
   const onChangeContent = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setContent(event.target.value);
   };
 
-  const onChangeIsForExchange = (event: ChangeEvent<HTMLInputElement>) => {
-    setIsForExchange(event.target.checked);
+  const onChangeForExchange = (event: ChangeEvent<HTMLInputElement>) => {
+    setForExchange(event.target.checked);
   };
 
-  const onChangeIsForSale = (event: ChangeEvent<HTMLInputElement>) => {
-    setIsForSale(event.target.checked);
+  const onChangeForSale = (event: ChangeEvent<HTMLInputElement>) => {
+    setForSale(event.target.checked);
   };
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const postData = {
-      flowerName,
-      flowerType,
-      quantity,
-      height,
-      feature,
-      postRange,
-      content,
-      isForExchange,
-      isForSale,
+    const postDTO: PostDTO = {
+      postRange: postRange,
+      forExchange: forExchange,
+      forSale: forSale,
+      flowerName: flowerName,
+      content: content,
+      flowerType: flowerType,
+      postDetail: {
+        height: height,
+        feature: feature,
+        quantity: quantity,
+      },
+      images: imageFiles.map((file, index) => ({
+        image: "", // You can set the base64 encoded image data if available
+      })),
     };
-    console.log(postData);
+    console.log(postDTO);
     // You can then post this data to your backend
+    createPost(postDTO);
   };
 
   return (
@@ -210,7 +244,7 @@ function CreatePost() {
               <Input
                 type="radio"
                 value="전체공개"
-                checked={postRange === "전체공개"}
+                checked={postRange === "PUBLIC"}
                 onChange={onChangePostRange}
               />
               전체공개
@@ -221,7 +255,7 @@ function CreatePost() {
               <Input
                 type="radio"
                 value="구독자공개"
-                checked={postRange === "구독자공개"}
+                checked={postRange === "SUBSCRIBERS"}
                 onChange={onChangePostRange}
               />
               구독자공개
@@ -232,14 +266,14 @@ function CreatePost() {
               <Input
                 type="radio"
                 value="나만보기"
-                checked={postRange === "나만보기"}
+                checked={postRange === "PRIVATE"}
                 onChange={onChangePostRange}
               />
               나만보기
             </Label>
           </div>
         </div>
-        {postRange !== "나만보기" && (
+        {postRange !== "PRIVATE" && (
           <div>
             <Label htmlFor="content">내용:</Label>
             <TextArea
@@ -250,25 +284,25 @@ function CreatePost() {
             />
           </div>
         )}
-        {postRange !== "나만보기" && (
+        {postRange !== "PRIVATE" && (
           <div>
-            <Label htmlFor="isForExchange">교환희망여부:</Label>
+            <Label htmlFor="forExchange">교환희망여부:</Label>
             <Input
-              id="isForExchange"
+              id="forExchange"
               type="checkbox"
-              checked={isForExchange}
-              onChange={onChangeIsForExchange}
+              checked={forExchange}
+              onChange={onChangeForExchange}
             />
           </div>
         )}
-        {postRange !== "나만보기" && (
+        {postRange !== "PRIVATE" && (
           <div>
-            <Label htmlFor="isForSale">거래희망여부:</Label>
+            <Label htmlFor="forSale">거래희망여부:</Label>
             <Input
-              id="isForSale"
+              id="forSale"
               type="checkbox"
-              checked={isForSale}
-              onChange={onChangeIsForSale}
+              checked={forSale}
+              onChange={onChangeForSale}
             />
           </div>
         )}
