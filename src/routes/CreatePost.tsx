@@ -48,7 +48,7 @@ const Button = styled.button`
 `;
 
 function CreatePost() {
-  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [imageFiles, setImageFiles] = useState<string[]>([]);
   const [flowerName, setFlowerName] = useState<string>("");
   const [flowerType, setFlowerType] = useState<string>("");
   const [quantity, setQuantity] = useState<number>(0);
@@ -65,7 +65,18 @@ function CreatePost() {
     const files = event.target.files;
     if (files) {
       const selectedFiles = Array.from(files).slice(0, maxImages);
-      setImageFiles(selectedFiles);
+      Promise.all(
+        selectedFiles.map((file) => {
+          return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result as string);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+          });
+        })
+      )
+        .then((images) => setImageFiles(images as string[]))
+        .catch((e) => console.error(e));
     }
   };
 
@@ -148,9 +159,7 @@ function CreatePost() {
         feature: feature,
         quantity: quantity,
       },
-      images: imageFiles.map((file, index) => ({
-        image: "", // You can set the base64 encoded image data if available
-      })),
+      images: imageFiles.map((image) => ({ image: image })),
     };
     console.log(postDTO);
     // You can then post this data to your backend
@@ -178,7 +187,7 @@ function CreatePost() {
           {imageFiles.length > 0 ? (
             <ul>
               {imageFiles.map((file, index) => (
-                <li key={index}>{file.name}</li>
+                <li key={index}>Image {index + 1}</li>
               ))}
             </ul>
           ) : (
