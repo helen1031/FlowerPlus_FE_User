@@ -2,6 +2,7 @@ import { call } from "./ApiService";
 
 export interface PostDTO {
   postId?: number;
+  userId?: number;
   postRange?: string;
   forExchange?: boolean;
   forSale?: boolean;

@@ -5,7 +5,8 @@ import { PostDTO, getAllPosts } from "../service/PostService";
 import Container from "../components/Container";
 import Header from "../components/Header";
 import Title from "../components/Title";
-import ImageCell from "../components/ImageCell";
+import ImageCellContainer from "../components/PostPage/ImageCellContainer";
+import ImageCell from "../components/PostPage/ImageCell";
 
 const AllPost = () => {
   const [posts, setPosts] = useState<PostDTO[]>([]);
@@ -30,26 +31,23 @@ const AllPost = () => {
       <Header>
         <Title>전체 게시물 보기</Title>
       </Header>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: "10px",
-        }}
-      >
+      <ImageCellContainer>
         {posts
           .filter((post) => post.postId !== undefined)
-          .map((post) =>
-            post.images?.map((image, index) => (
+          .map((post, index) =>
+            post.images && post.images.length > 0 ? (
               <ImageCell
                 key={(post.postId ? post.postId : "undefined") + "-" + index}
-                onClick={() => navigate(`/all-post/${post.postId}`)}
+                onClick={() => navigate(`/${post.postId}`)}
               >
-                <img src={image.imageUrl || ""} alt={post.flowerName || ""} />
+                <img
+                  src={post.images[0].imageUrl || ""}
+                  alt={post.flowerName || ""}
+                />
               </ImageCell>
-            ))
+            ) : null
           )}
-      </div>
+      </ImageCellContainer>
     </Container>
   );
 };
