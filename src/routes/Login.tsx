@@ -1,13 +1,25 @@
+import { useNavigate } from "react-router-dom";
 import Title from "../components/Title";
 import { signin } from "../service/UserService";
+import { UserDTO } from "../service/UserService";
+import { useSetRecoilState } from "recoil";
+import { loggedInUserAtom } from "../atoms";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const setLoggedInUser = useSetRecoilState(loggedInUserAtom);
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const email = event.currentTarget.email.value;
     const password = event.currentTarget.password.value;
 
-    signin({ email, password });
+    signin({ email, password }).then((user: UserDTO | undefined) => {
+      if (user) {
+        setLoggedInUser(user);
+        navigate("/");
+      }
+    });
   };
 
   return (

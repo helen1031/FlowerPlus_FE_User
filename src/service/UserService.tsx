@@ -2,9 +2,15 @@ import { call } from "./ApiService";
 
 interface SignInResponse {
   token: string;
+  email: string;
+  password: string;
+  userId: number;
+  username: string;
+  nickname: string;
 }
 
-interface UserDTO {
+export interface UserDTO {
+  userId?: number;
   username?: string;
   nickname?: string;
   email: string;
@@ -16,7 +22,7 @@ export function signin(userDTO: UserDTO) {
     (response) => {
       if (response.token) {
         localStorage.setItem("ACCESS_TOKEN", response.token);
-        window.location.href = "/";
+        return response;
       }
     }
   );
