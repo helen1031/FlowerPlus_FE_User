@@ -97,7 +97,7 @@ function CreatePost() {
         newValue = "DAHLIAS";
         break;
       default:
-        newValue = "ROSES"; //default value
+        newValue = "ROSES";
         break;
     }
     setFlowerType(newValue);
@@ -165,6 +165,7 @@ function CreatePost() {
       images: imageFiles.map((image) => ({ image: image })),
     };
     createPost(postDTO);
+    alert("게시물이 등록되었습니다.");
     navigate("/my-posts");
   };
 
@@ -210,7 +211,13 @@ function CreatePost() {
           <Label htmlFor="flowerType">종:</Label>
           <Select
             id="flowerType"
-            value={flowerType}
+            value={
+              flowerType === "ROSES"
+                ? "장미"
+                : flowerType === "DAHLIAS"
+                ? "다알리아"
+                : ""
+            }
             onChange={onChangeFlowerType}
           >
             <option value="">Select 종</option>

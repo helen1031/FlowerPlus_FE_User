@@ -27,7 +27,6 @@ export function createPost(postDTO: PostDTO) {
   return call("/posts", "POST", postDTO)
     .then((response) => {
       console.log("Response:", response);
-      alert("게시물이 등록되었습니다.");
     })
     .catch((error) => {
       console.error("Error:", error);
