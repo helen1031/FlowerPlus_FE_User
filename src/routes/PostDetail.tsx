@@ -52,8 +52,7 @@ function PostDetail() {
   console.log("loggedInUser:", loggedInUser);
 
   const handleEdit = () => {
-    console.log("Edit button clicked");
-    // Implement your edit functionality here
+    navigate(`/modify-post/${post.postId}`);
   };
 
   const handleDelete = () => {

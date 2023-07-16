@@ -38,6 +38,17 @@ export function deletePost(id: string) {
   return call(`/posts/${id}`, "DELETE", null);
 }
 
+export function updatePost(id: string, postDTO: PostDTO) {
+  return call(`/posts/${id}`, "PUT", postDTO)
+    .then((response) => {
+      alert("게시물이 수정되었습니다.");
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      alert("게시물 수정이 실패했습니다.");
+    });
+}
+
 export function getMyPosts(): Promise<PostDTO[]> {
   return call("/posts/my-posts", "GET", null);
 }
