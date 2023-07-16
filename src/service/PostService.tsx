@@ -60,3 +60,9 @@ export function getPostById(id: string): Promise<PostDTO> {
 export function getAllPosts(): Promise<PostDTO[]> {
   return call("/posts/public-posts", "GET", null);
 }
+
+export function getOthersPostsbyUserId(
+  otherUserId: string
+): Promise<PostDTO[]> {
+  return call(`/posts/user/${otherUserId}`, "GET", null);
+}

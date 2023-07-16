@@ -35,7 +35,7 @@ function AuthorDetail({ userId, avatarUrl }: AuthorDetailProps) {
   return (
     <AuthorContainer>
       <AuthorAvatar src={avatarUrl} alt="Author Avatar" />
-      <AuthorUsername to={`/user/${userId}`}>{userId}</AuthorUsername>
+      <AuthorUsername to={`/others-posts/${userId}`}>{userId}</AuthorUsername>
     </AuthorContainer>
   );
 }

@@ -85,7 +85,9 @@ function PostDetail() {
             .filter((url): url is string => url !== undefined) ?? []
         }
       />
-      <AuthorInfo userId={post.userId} avatarUrl={""} />
+      {loggedInUser?.userId !== post.userId && (
+        <AuthorInfo userId={post.userId} avatarUrl={""} />
+      )}
       <ExchangeSaleInfoContainer>
         {" "}
         <ExchangeInfo forExchange={forExchange} />
