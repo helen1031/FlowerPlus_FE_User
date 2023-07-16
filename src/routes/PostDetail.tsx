@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { PostDTO, getMyPostById } from "../service/PostService";
+import { useNavigate, useParams } from "react-router-dom";
+import { PostDTO, getPostById } from "../service/PostService";
+import { useRecoilValue } from "recoil";
+import { loggedInUserAtom } from "../atoms";
+import { UserDTO } from "../service/UserService";
+import { deletePost } from "../service/PostService";
 
 import Container from "../components/Container";
 import Header from "../components/Header";
@@ -19,10 +23,13 @@ interface RouteParams extends Record<string, string | undefined> {
 function PostDetail() {
   const { id } = useParams<RouteParams>();
   const [post, setPost] = useState<PostDTO | null>(null);
+  const loggedInUser = useRecoilValue<UserDTO | null>(loggedInUserAtom);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (id) {
-      getMyPostById(id)
+      getPostById(id)
         .then((data: PostDTO) => {
           const filteredImages = data.images
             ? data.images.filter((image) => image.imageUrl !== null)
@@ -41,6 +48,30 @@ function PostDetail() {
 
   const forExchange = post.forExchange ?? false;
   const forSale = post.forSale ?? false;
+
+  console.log("loggedInUser:", loggedInUser);
+
+  const handleEdit = () => {
+    console.log("Edit button clicked");
+    // Implement your edit functionality here
+  };
+
+  const handleDelete = () => {
+    const confirmDelete = window.confirm(
+      "정말로 삭제하시겠습니까? 삭제하면 관련 모든 채팅 데이터도 삭제되게 됩니다."
+    );
+
+    if (confirmDelete && id) {
+      deletePost(id)
+        .then(() => {
+          alert("삭제되었습니다");
+          navigate("/my-posts");
+        })
+        .catch((error) => {
+          console.error("Error deleting post:", error);
+        });
+    }
+  };
 
   return (
     <Container>
@@ -64,12 +95,20 @@ function PostDetail() {
 
       <p>꽃 이름: {post.flowerName}</p>
       <p>종: {post.flowerType}</p>
-
-      <p>수량: {post.postDetail?.quantity ?? ""}</p>
-      <p>키: {post.postDetail?.height}</p>
-      <p>특징: {post.postDetail?.feature}</p>
-
+      {loggedInUser?.userId === post.userId && (
+        <>
+          <p>수량: {post.postDetail?.quantity ?? ""}</p>
+          <p>키: {post.postDetail?.height}</p>
+          <p>특징: {post.postDetail?.feature}</p>
+        </>
+      )}
       <p>{post.content}</p>
+      {loggedInUser?.userId === post.userId && (
+        <>
+          <button onClick={handleEdit}>수정하기</button>
+          <button onClick={handleDelete}>삭제하기</button>
+        </>
+      )}
     </Container>
   );
 }

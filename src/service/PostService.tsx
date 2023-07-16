@@ -27,19 +27,23 @@ export function createPost(postDTO: PostDTO) {
   return call("/posts", "POST", postDTO)
     .then((response) => {
       console.log("Response:", response);
-      alert("게시물 등록 성공!");
+      alert("게시물이 등록되었습니다.");
     })
     .catch((error) => {
       console.error("Error:", error);
-      alert("게시물 등록 실패!");
+      alert("게시물 등록이 실패했습니다.");
     });
+}
+
+export function deletePost(id: string) {
+  return call(`/posts/${id}`, "DELETE", null);
 }
 
 export function getMyPosts(): Promise<PostDTO[]> {
   return call("/posts/my-posts", "GET", null);
 }
 
-export function getMyPostById(id: string): Promise<PostDTO> {
+export function getPostById(id: string): Promise<PostDTO> {
   return call(`/posts/${id}`, "GET", null);
 }
 

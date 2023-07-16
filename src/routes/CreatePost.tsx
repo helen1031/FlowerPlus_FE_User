@@ -1,4 +1,5 @@
 import { ChangeEvent, FormEvent, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Container from "../components/Container";
 import Header from "../components/Header";
@@ -58,6 +59,8 @@ function CreatePost() {
   const [content, setContent] = useState<string>("");
   const [forExchange, setForExchange] = useState<boolean>(false);
   const [forSale, setForSale] = useState<boolean>(false);
+
+  const navigate = useNavigate();
 
   const maxImages = 5;
 
@@ -161,9 +164,8 @@ function CreatePost() {
       },
       images: imageFiles.map((image) => ({ image: image })),
     };
-    console.log(postDTO);
-    // You can then post this data to your backend
     createPost(postDTO);
+    navigate("/my-posts");
   };
 
   return (

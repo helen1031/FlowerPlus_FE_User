@@ -27,6 +27,7 @@ const AuthorUsername = styled(Link)`
 
 interface AuthorDetailProps {
   userId?: number;
+  nickname?: string;
   avatarUrl?: string;
 }
 

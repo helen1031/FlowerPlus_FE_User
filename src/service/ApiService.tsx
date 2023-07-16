@@ -27,6 +27,7 @@ export function call<T>(
 
   return axios(options)
     .then((response) => {
+      console.log("Response:", response.data);
       if (response.status === 200) {
         return response.data as T;
       } else if (response.status === 403) {

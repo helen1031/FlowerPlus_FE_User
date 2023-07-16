@@ -1,5 +1,7 @@
 import { createGlobalStyle } from "styled-components";
 import Router from "./Router";
+import { useRecoilValue } from "recoil";
+import { loggedInUserAtom } from "./atoms";
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
@@ -68,6 +70,8 @@ a {
 `;
 
 function App() {
+  const loggedInUser = useRecoilValue(loggedInUserAtom);
+
   return (
     <>
       <GlobalStyle></GlobalStyle>
