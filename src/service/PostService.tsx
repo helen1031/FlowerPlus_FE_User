@@ -57,6 +57,10 @@ export function getPostById(id: string): Promise<PostDTO> {
   return call(`/posts/${id}`, "GET", null);
 }
 
+export function getSubscribersPosts(): Promise<PostDTO[]> {
+  return call(`/posts/subscriber-posts`, "GET", null);
+}
+
 export function getAllPosts(): Promise<PostDTO[]> {
   return call("/posts/public-posts", "GET", null);
 }

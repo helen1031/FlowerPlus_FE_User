@@ -6,6 +6,7 @@ import CreatePost from "./routes/CreatePost";
 import ModifyPost from "./routes/ModifyPost";
 import PostDetail from "./routes/PostDetail";
 import MyPost from "./routes/MyPost";
+import SubscriberPost from "./routes/SubscriberPost";
 import AllPost from "./routes/AllPost";
 import OthersPost from "./routes/OthersPost";
 
@@ -23,6 +24,10 @@ function Router() {
         ></Route>
         <Route path="/:id" element={<PostDetail></PostDetail>} />
         <Route path="/my-posts" element={<MyPost></MyPost>}></Route>
+        <Route
+          path="/subscriber-posts"
+          element={<SubscriberPost></SubscriberPost>}
+        ></Route>
         <Route path="/all-posts" element={<AllPost></AllPost>}></Route>
         <Route
           path="/others-posts/:userId"

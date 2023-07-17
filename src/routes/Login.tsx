@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Title from "../components/Title";
 import { signin } from "../service/UserService";
 import { UserDTO } from "../service/UserService";
@@ -8,6 +8,8 @@ import { loggedInUserAtom } from "../atoms";
 const Login = () => {
   const navigate = useNavigate();
   const setLoggedInUser = useSetRecoilState(loggedInUserAtom);
+  const location = useLocation();
+  const redirectUrl = new URLSearchParams(location.search).get("redirectUrl");
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -17,7 +19,11 @@ const Login = () => {
     signin({ email, password }).then((user: UserDTO | undefined) => {
       if (user) {
         setLoggedInUser(user);
-        navigate("/");
+        if (redirectUrl) {
+          navigate(redirectUrl);
+        } else {
+          navigate("/");
+        }
       }
     });
   };
