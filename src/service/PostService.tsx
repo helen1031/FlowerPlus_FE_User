@@ -19,7 +19,7 @@ export interface PostDTO {
     imageId?: number;
     postId?: number;
     imageUrl?: string;
-    image?: string;
+    image?: File | string;
   }[];
 }
 

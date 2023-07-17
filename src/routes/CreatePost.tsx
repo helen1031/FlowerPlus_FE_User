@@ -48,6 +48,19 @@ const Button = styled.button`
   margin: 5px;
 `;
 
+const ImagePreview = styled.img`
+  width: 50px;
+  height: 50px;
+`;
+
+const RemoveButton = styled.button`
+  background: none;
+  border: none;
+  color: red;
+  font-weight: bold;
+  cursor: pointer;
+`;
+
 function CreatePost() {
   const [imageFiles, setImageFiles] = useState<string[]>([]);
   const [flowerName, setFlowerName] = useState<string>("");
@@ -64,13 +77,26 @@ function CreatePost() {
 
   const maxImages = 5;
 
+  const handleRemoveImage = (
+    event: React.MouseEvent,
+    indexToRemove: number
+  ) => {
+    event.preventDefault();
+    setImageFiles((prevImages) =>
+      prevImages.filter((_, index) => index !== indexToRemove)
+    );
+  };
+
   const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
-      const selectedFiles = Array.from(files).slice(0, maxImages);
-      Promise.all(
+      const selectedFiles = Array.from(files).slice(
+        0,
+        maxImages - imageFiles.length
+      );
+      Promise.all<string>(
         selectedFiles.map((file) => {
-          return new Promise((resolve, reject) => {
+          return new Promise<string>((resolve, reject) => {
             const reader = new FileReader();
             reader.onloadend = () => resolve(reader.result as string);
             reader.onerror = reject;
@@ -78,7 +104,9 @@ function CreatePost() {
           });
         })
       )
-        .then((images) => setImageFiles(images as string[]))
+        .then((newImages) =>
+          setImageFiles((prevImages) => [...prevImages, ...newImages])
+        )
         .catch((e) => console.error(e));
     }
   };
@@ -190,7 +218,17 @@ function CreatePost() {
           {imageFiles.length > 0 ? (
             <ul>
               {imageFiles.map((file, index) => (
-                <li key={index}>Image {index + 1}</li>
+                <li key={index}>
+                  Image {index + 1}
+                  <ImagePreview src={file} alt={`Image ${index + 1}`} />
+                  <RemoveButton
+                    onClick={(event: React.MouseEvent<HTMLButtonElement>) =>
+                      handleRemoveImage(event, index)
+                    }
+                  >
+                    X
+                  </RemoveButton>
+                </li>
               ))}
             </ul>
           ) : (
