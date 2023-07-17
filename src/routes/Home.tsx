@@ -23,8 +23,8 @@ function Home() {
       </Header>
       <Btn onClick={() => navigate("/create-post")}>게시물 등록하기</Btn>
       <Btn onClick={() => navigate("/my-posts")}>내 게시물 조회하기</Btn>
-      <Btn onClick={() => navigate("/neighbor-posts")}>
-        이웃 게시물 조회하기
+      <Btn onClick={() => navigate("/subscriber-posts")}>
+        구독 게시물 조회하기
       </Btn>
       <Btn onClick={() => navigate("/all-posts")}>전체 게시물 조회하기</Btn>
     </Container>

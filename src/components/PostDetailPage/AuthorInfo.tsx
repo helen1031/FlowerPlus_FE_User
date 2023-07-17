@@ -31,7 +31,7 @@ interface AuthorDetailProps {
   avatarUrl?: string;
 }
 
-function AuthorDetail({ userId, avatarUrl }: AuthorDetailProps) {
+function AuthorInfo({ userId, avatarUrl }: AuthorDetailProps) {
   return (
     <AuthorContainer>
       <AuthorAvatar src={avatarUrl} alt="Author Avatar" />
@@ -40,4 +40,4 @@ function AuthorDetail({ userId, avatarUrl }: AuthorDetailProps) {
   );
 }
 
-export default AuthorDetail;
+export default AuthorInfo;

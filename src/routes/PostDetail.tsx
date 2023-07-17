@@ -26,6 +26,7 @@ function PostDetail() {
   const loggedInUser = useRecoilValue<UserDTO | null>(loggedInUserAtom);
 
   const navigate = useNavigate();
+  const token = localStorage.getItem("ACCESS_TOKEN") || "";
 
   useEffect(() => {
     if (id) {
@@ -77,7 +78,6 @@ function PostDetail() {
       <Header>
         <Title>게시물 상세 보기</Title>
       </Header>
-
       <ImageDetail
         images={
           post?.images
@@ -85,6 +85,7 @@ function PostDetail() {
             .filter((url): url is string => url !== undefined) ?? []
         }
       />
+
       {loggedInUser?.userId !== post.userId && (
         <AuthorInfo userId={post.userId} avatarUrl={""} />
       )}
@@ -93,7 +94,6 @@ function PostDetail() {
         <ExchangeInfo forExchange={forExchange} />
         <SaleInfo forSale={forSale} />
       </ExchangeSaleInfoContainer>
-
       <p>꽃 이름: {post.flowerName}</p>
       <p>종: {post.flowerType}</p>
       {loggedInUser?.userId === post.userId && (

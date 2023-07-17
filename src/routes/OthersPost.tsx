@@ -5,6 +5,7 @@ import { PostDTO, getOthersPostsbyUserId } from "../service/PostService";
 import Container from "../components/Container";
 import Header from "../components/Header";
 import Title from "../components/Title";
+import AuthorHeader from "../components/PostPage/AuthorHeader";
 import ImageCellContainer from "../components/PostPage/ImageCellContainer";
 import ImageCell from "../components/PostPage/ImageCell";
 
@@ -38,6 +39,7 @@ const OthersPost = () => {
       <Header>
         <Title>{`${userId}의 게시물 보기`}</Title>
       </Header>
+      <AuthorHeader userId={parseInt(userId || "")} />
       <ImageCellContainer>
         {posts
           .filter((post) => post.postId !== undefined)
